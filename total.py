@@ -5,12 +5,15 @@ import os
 from db import DB
 from login import LoginForm
 from user import UsersModel
+from orders import OrdersModel
+
 
 db = DB()
 app = Flask(__name__)
 app.secret_key = 'any random string'
 UPLOAD_FOLDER = "Загрузки"
 UsersModel(db.get_connection()).init_table()
+OrdersModel(db.get_connection()).init_table()
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -115,6 +118,11 @@ def register():
             session['username'] = user_name
             session['user_id'] = exists[1]
         return redirect("/title")
+
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html', staff='Сайт на доработке')
 
 
 if __name__ == '__main__':
