@@ -11,10 +11,6 @@ if (r==true)
   window.location.replace("/delete_order/" + item);
   alert("Мы благодарим Вас за сотрудничество");
   }
-else
-  {
-  window.location.replace("/myorders");
-  }
 }
 
 
@@ -23,13 +19,16 @@ else
 
 
 {% if "username" in session %}
-<a class="navbar-brand" href="/logout">{{session['username']}}</a>
+<h2>{{session['username']}}</h2>
 {% endif %}
 <a href="/upload_file">Добавить заказ</a>
+<a href="/title">Главная</a>
 {% for item in news %}
 <div class="alert alert-dark" role="alert">
+    <div>ID Заказа: {{ item[0] }}</div>
     <h2>{{item[1]}}</h2>
     <div>{{item[2]}}</div>
+    <div>Дата создания заказа: {{item[3]}}</div>
     <input type="button" onclick="show_confirm({{item[0]}})" value="Отменить заказ">
 </div>
 {% endfor %}
