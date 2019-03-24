@@ -150,8 +150,8 @@ def delete_order(news_id):
 @app.route("/chat/<int:id_user2>", methods=['GET', 'POST'])
 def chat(id_user2):
     if request.method == 'GET':
-        chat = ChatModel(db.get_connection()).get_all(session['user_id'])
-        chat += ChatModel(db.get_connection()).get_all(id_user2)
+        chat = ChatModel(db.get_connection()).get_all(session['user_id'], id_user2)
+        chat += ChatModel(db.get_connection()).get_all(id_user2, session['user_id'])
         chat = sorted(chat, key=lambda x: x[0], reverse=True)
         orders = OrdersModel(db.get_connection()).get(session['user_id'])
         return render_template('chat.html', username=session['username'],

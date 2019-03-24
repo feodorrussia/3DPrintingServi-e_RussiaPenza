@@ -22,8 +22,8 @@ class ChatModel:
         cursor.close()
         self.connection.commit()
 
-    def get_all(self, id_user):
+    def get_all(self, id_user, id_user2):
         cursor = self.connection.cursor()
-        cursor.execute("SELECT * FROM messages Where id_user1 = ?", (str(id_user)))
+        cursor.execute("SELECT * FROM messages Where id_user1 = ? and id_user2 = ?", (str(id_user), str(id_user2)))
         rows = cursor.fetchall()
         return rows
