@@ -7,6 +7,7 @@ from login import LoginForm
 from user import UsersModel
 from orders import OrdersModel
 from chat import ChatModel
+import datetime
 
 db = DB()
 app = Flask(__name__)
@@ -101,8 +102,8 @@ def sample_file_upload():
         n.write(tmp)
         n.close()
         order_model = OrdersModel(db.get_connection())
-        print(name, t, session['user_id'])
-        order_model.insert(name, t, session['user_id'])
+        order_model.insert(name, t, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                           session['user_id'])
         return "Ваш заказ ожидает обработки. <a href='/title'>Вернуться на главную</a>"
 
 
@@ -134,7 +135,7 @@ def contact():
 def myorders():
     orders = OrdersModel(db.get_connection()).get_all()
     return render_template('myorders.html', username=session['username'],
-                           news=orders)
+                           news=sorted(orders, key=(lambda x: x[2]), reverse=True))
 
 
 @app.route('/delete_order/<int:news_id>', methods=['GET'])

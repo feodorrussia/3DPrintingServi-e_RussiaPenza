@@ -8,16 +8,18 @@ class OrdersModel:
                             (id INTEGER PRIMARY KEY AUTOINCREMENT, 
                              order_name VARCHAR(50),
                              order_description VARCHAR(128),
+                             creation_data VARCHAR(65536),
                              user_id INTEGER
                              )''')
         cursor.close()
         self.connection.commit()
 
-    def insert(self, order_name, order_description, user_id):
+    def insert(self, order_name, order_description, creation_data, user_id):
         cursor = self.connection.cursor()
         cursor.execute('''INSERT INTO orders 
-                          (order_name, order_description, user_id) 
-                          VALUES (?,?,?)''', (order_name, order_description, user_id))
+                          (order_name, order_description, creation_data, user_id) 
+                          VALUES (?,?,?,?)''', (order_name, order_description, creation_data,
+                                                user_id))
         cursor.close()
         self.connection.commit()
 
