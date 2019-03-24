@@ -7,7 +7,7 @@ class OrdersModel:
         cursor.execute('''CREATE TABLE IF NOT EXISTS orders 
                             (id INTEGER PRIMARY KEY AUTOINCREMENT, 
                              order_name VARCHAR(50),
-                             order_description VARCHAR(128)
+                             order_description VARCHAR(128),
                              user_id INTEGER
                              )''')
         cursor.close()

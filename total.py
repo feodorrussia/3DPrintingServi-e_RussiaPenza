@@ -90,14 +90,18 @@ def sample_file_upload():
     elif request.method == 'POST':
         if not os.path.exists(UPLOAD_FOLDER):
             os.makedirs(UPLOAD_FOLDER)
-        f = request.files['file']
         name = request.form.get('order')
         t = request.form.get('about')
+        f = request.files['file']
         x = f.__repr__()
         tmp = f.read()
-        n = open(UPLOAD_FOLDER + "/" + x[x.index("'") + 1:x.index("'", 15)], "wb")
+        FILE_NAME = x[x.index("'") + 1:x.index("'", 15)]
+        n = open(UPLOAD_FOLDER + "/" + FILE_NAME, "wb")
         n.write(tmp)
         n.close()
+        order_model = OrdersModel(db.get_connection())
+        print(name, t, session['user_id'])
+        order_model.insert(name, t, session['user_id'])
         return "Ваш заказ ожидает обработки. <a href='/title'>Вернуться на главную</a>"
 
 
