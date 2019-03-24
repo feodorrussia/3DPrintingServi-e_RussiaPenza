@@ -23,9 +23,10 @@ else
 
 
 {% if "username" in session %}
-<a class="navbar-brand" href="/logout">{{session['username']}}</a>
+<h2>{{session['username']}}</h2>
 {% endif %}
 <a href="/upload_file">Добавить заказ</a>
+<a href="/title">Главная</a>
 {% for item in news %}
 <div class="alert alert-dark" role="alert">
     <h2>{{item[1]}}</h2>
