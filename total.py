@@ -53,7 +53,7 @@ def sample_file_upload():
         n = open(UPLOAD_FOLDER + "/" + x[x.index("'") + 1:x.index("'", 15)], "wb")
         n.write(tmp)
         n.close()
-        return "Форма отправлена"
+        return "Ваш заказ ожидает обработки. <a href='/title'>Вернуться на главную</a>"
 
 
 if __name__ == '__main__':
