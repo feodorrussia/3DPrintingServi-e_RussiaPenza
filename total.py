@@ -42,7 +42,8 @@ def staff():
 @app.route('/upload_file', methods=['POST', 'GET'])
 def sample_file_upload():
     if request.method == 'GET':
-        return render_template('upload_file.html', filament='Сайт на доработке')
+        return render_template('upload_file.html', filament='Сайт на доработке',
+                               text=open("Описание_заказа.txt").read() + "\n")
     elif request.method == 'POST':
         if not os.path.exists(UPLOAD_FOLDER):
             os.makedirs(UPLOAD_FOLDER)
