@@ -2,16 +2,40 @@ from flask import Flask, url_for, session, redirect, render_template, request, j
     make_response, \
     request
 import os
+from db import DB
+from login import LoginForm
+from user import UsersModel
 
+db = DB()
 app = Flask(__name__)
 app.secret_key = 'any random string'
 UPLOAD_FOLDER = "Загрузки"
+UsersModel(db.get_connection()).init_table()
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user_name = form.username.data
+        password = form.password.data
+        user_model = UsersModel(db.get_connection())
+        exists = user_model.exists(user_name, password)
+        if (exists[0]):
+            session['username'] = user_name
+            session['user_id'] = exists[1]
+            if exists[1] == 4:
+                return redirect("/index_admin")
+            return redirect("/index")
+    return render_template('loginform.html', title='Авторизация', form=form)
 
 
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('title.html', text1=open('text_init.txt').read())
+    if 'username' not in session:
+        return render_template('title_out.html', text1=open('text_init.txt').read())
+    return render_template('title_in.html', text1=open('text_init.txt').read(), username=session['username'])
 
 
 @app.route('/lab')
@@ -53,6 +77,23 @@ def sample_file_upload():
         n.write(tmp)
         n.close()
         return "Ваш заказ ожидает обработки. <a href='/title'>Вернуться на главную</a>"
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = LoginForm()
+    if request.method == 'GET':
+        return render_template('loginform.html', title='Зарегистрироваться', form=form)
+    elif request.method == 'POST':
+        user_name = form.username.data
+        password = form.password.data
+        user_model = UsersModel(db.get_connection())
+        user_model.insert(user_name, password)
+        exists = user_model.exists(user_name, password)
+        if (exists[0]):
+            session['username'] = user_name
+            session['user_id'] = exists[1]
+        return redirect("/index")
 
 
 if __name__ == '__main__':
