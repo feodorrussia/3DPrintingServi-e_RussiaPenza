@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <script type="text/javascript">
+function show_confirm(item)
+{
+var r=confirm("Вы точно хотите отменить заказ?");
+if (r==true)
+  {
+  window.location.replace("/delete_order/" + item);
+  alert("Мы благодарим Вас за сотрудничество");
+  }
+else
+  {
+  window.location.replace("/myorders");
+  }
+}
+
+
+    </script>
+</head>
+
+
+{% if "username" in session %}
+<a class="navbar-brand" href="/logout">{{session['username']}}</a>
+{% endif %}
+<a href="/upload_file">Добавить заказ</a>
+{% for item in news %}
+<div class="alert alert-dark" role="alert">
+    <h2>{{item[1]}}</h2>
+    <div>{{item[2]}}</div>
+    <input type="button" onclick="show_confirm({{item[0]}})" value="Отменить заказ">
+</div>
+{% endfor %}
+{% endblock %}
