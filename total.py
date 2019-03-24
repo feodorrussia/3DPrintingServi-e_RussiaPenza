@@ -7,7 +7,6 @@ from login import LoginForm
 from user import UsersModel
 from orders import OrdersModel
 
-
 db = DB()
 app = Flask(__name__)
 app.secret_key = 'any random string'
@@ -127,6 +126,22 @@ def register():
 @app.route('/contact')
 def contact():
     return render_template('contact.html')
+
+
+@app.route("/myorders")
+def myorders():
+    orders = OrdersModel(db.get_connection()).get_all()
+    return render_template('myorders.html', username=session['username'],
+                           news=orders)
+
+
+@app.route('/delete_order/<int:news_id>', methods=['GET'])
+def delete_order(news_id):
+    if 'username' not in session:
+        return redirect('/login')
+    nm = OrdersModel(db.get_connection())
+    nm.delete(news_id)
+    return redirect("/myorders")
 
 
 if __name__ == '__main__':
