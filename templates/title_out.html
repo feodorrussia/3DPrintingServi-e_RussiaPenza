@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header>
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="/login">Войти</a>
+    </nav>
+    <h3>О нашей организации</h3>
+    <h6>{{text1}}</h6>
+    <nav class="navbar navbar-light bg-light"><a class="navbar-brand" href="/lab">Наша
+        лаболатория</a></nav>
+    <nav class="navbar navbar-light bg-light"><a class="navbar-brand" href="/upload_file">Оформить
+        заказ</a></nav>
+    <nav class="navbar navbar-light bg-light"><a class="navbar-brand" href="contact">Контакты и
+        консультации по 3D печати</a></nav>
+</header>
+{% endblock %}

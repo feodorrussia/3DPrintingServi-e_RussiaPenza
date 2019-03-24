@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<h1>Оформление заказа</h1>
 
 <head>
     <meta charset="UTF-8"/>
@@ -15,23 +15,30 @@
     }
     }
 
+
+
+
     </style>
 </head>
 
 <body>
-<a href="#form">Описание заказа</a>
+<input class="form-control" id="order" placeholder="Введите назвение заказа" name="order">
+<a class="navbar-brand" href="#form">Описание заказа</a>
 <form class="hiden" id="form">
     <div>{{ text }}</div>
     <a href="#">Зактрыть описание заказа</a>
 </form>
 </body>
-
+<div class="form-group">
+    <textarea class="form-control" id="about" rows="3" name="about"></textarea>
+</div>
 
 <form method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label for="photo">Выберите файл</label>
         <input type="file" class="form-control-file" id="photo" name="file">
     </div>
+
     <button type="submit" class="btn btn-primary">Отправить</button>
 </form>
 
