@@ -6,6 +6,7 @@ from db import DB
 from login import LoginForm
 from user import UsersModel
 from orders import OrdersModel
+from chat import ChatModel
 
 db = DB()
 app = Flask(__name__)
@@ -13,6 +14,7 @@ app.secret_key = 'any random string'
 UPLOAD_FOLDER = "Загрузки"
 UsersModel(db.get_connection()).init_table()
 OrdersModel(db.get_connection()).init_table()
+ChatModel(db.get_connection()).init_table()
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -142,6 +144,23 @@ def delete_order(news_id):
     nm = OrdersModel(db.get_connection())
     nm.delete(news_id)
     return redirect("/myorders")
+
+
+@app.route("/chat/<int:id_user2>", methods=['GET', 'POST'])
+def chat(id_user2):
+    if request.method == 'GET':
+        chat = ChatModel(db.get_connection()).get_all(session['user_id'])
+        chat += ChatModel(db.get_connection()).get_all(id_user2)
+        chat = sorted(chat, key=lambda x: x[0], reverse=True)
+        orders = OrdersModel(db.get_connection()).get(session['user_id'])
+        return render_template('chat.html', username=session['username'],
+                               message=chat, user_id=session['user_id'], orders=orders)
+    elif request.method == 'POST':
+        message = request.form['message']
+        order_name = request.form.get('order')
+        chat_model = ChatModel(db.get_connection())
+        chat_model.insert(session['user_id'], message, order_name, id_user2)
+        return redirect(f"/chat/{str(id_user2)}")
 
 
 if __name__ == '__main__':

@@ -21,10 +21,10 @@ class OrdersModel:
         cursor.close()
         self.connection.commit()
 
-    def get(self, order_id):
+    def get(self, user_id):
         cursor = self.connection.cursor()
-        cursor.execute("SELECT * FROM orders WHERE id = ?", (str(order_id)))
-        row = cursor.fetchone()
+        cursor.execute("SELECT * FROM orders WHERE user_id = ?", (str(user_id)))
+        row = cursor.fetchall()
         return row
 
     def get_all(self):
