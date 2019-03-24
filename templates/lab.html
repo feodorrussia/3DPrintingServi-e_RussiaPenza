@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Наша лаболатория</h2>
+<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active" align="center">
+            <a class="navbar-brand" href="/printers"><img src="static/img/FLP902.jpg"
+                                                          class="d-block w-50" alt="..."
+                                                          title="Наши принтеры"></a>
+        </div>
+        <div class="carousel-item" align="center">
+            <a class="navbar-brand" href="/staff"><img src="static/img/person.jpg"
+                                                          class="d-block w-25" alt="..."
+                                                          title="Наш персонал"></a>
+        </div>
+        <div class="carousel-item" align="center">
+            <a class="navbar-brand" href="/PC"><img src="static/img/PC.jpg"
+                                                          class="d-block w-50"
+                                                          alt="..."
+                                                          title="3D моделирование"></a>
+        </div>
+        <div class="carousel-item" align="center">
+            <a class="navbar-brand" href="/filament"><img src="static/img/filament.jpg"
+                                                          class="d-block w-50" alt="..."
+                                                          title="Пластики"></a>
+        </div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleControls" role="button"
+       data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleControls" role="button"
+       data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js"
+        integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp"
+        crossorigin="anonymous"></script>
+{% endblock %}
