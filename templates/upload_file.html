@@ -2,6 +2,30 @@
 
 {% block content %}
 
+<head>
+    <meta charset="UTF-8"/>
+    <title>Document</title>
+    <style>
+    .hiden{
+      display:none;
+    }
+    .hiden:target{
+      display:block;
+    }
+    }
+
+
+    </style>
+</head>
+
+<body>
+<a href="#form">Описание заказа</a>
+<form class="hiden" id="form">
+    <div>{{ text }}</div>
+    <a href="#">Зактрыть описание заказа</a>
+</form>
+</body>
+
 
 <h1>Загрузка файла</h1>
 <form method="post" enctype="multipart/form-data">
