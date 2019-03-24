@@ -122,7 +122,7 @@ def register():
 
 @app.route('/contact')
 def contact():
-    return render_template('contact.html', staff='Сайт на доработке')
+    return render_template('contact.html')
 
 
 if __name__ == '__main__':
