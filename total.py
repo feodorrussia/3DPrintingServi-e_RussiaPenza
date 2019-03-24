@@ -88,6 +88,8 @@ def sample_file_upload():
         if not os.path.exists(UPLOAD_FOLDER):
             os.makedirs(UPLOAD_FOLDER)
         f = request.files['file']
+        name = request.form.get('order')
+        t = request.form.get('about')
         x = f.__repr__()
         tmp = f.read()
         n = open(UPLOAD_FOLDER + "/" + x[x.index("'") + 1:x.index("'", 15)], "wb")

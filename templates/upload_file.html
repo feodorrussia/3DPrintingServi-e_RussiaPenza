@@ -17,17 +17,21 @@
 
 
 
+
     </style>
 </head>
 
 <body>
-<a href="#form">Описание заказа</a>
+<input class="form-control" id="order" placeholder="Введите назвение заказа" name="order">
+<a class="navbar-brand" href="#form">Описание заказа</a>
 <form class="hiden" id="form">
     <div>{{ text }}</div>
     <a href="#">Зактрыть описание заказа</a>
 </form>
 </body>
-
+<div class="form-group">
+    <textarea class="form-control" id="about" rows="3" name="about"></textarea>
+</div>
 
 <form method="post" enctype="multipart/form-data">
     <div class="form-group">
