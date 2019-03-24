@@ -16,6 +16,8 @@ UsersModel(db.get_connection()).init_table()
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    global i
+    i = False
     if form.validate_on_submit():
         user_name = form.username.data
         password = form.password.data
@@ -25,17 +27,29 @@ def login():
             session['username'] = user_name
             session['user_id'] = exists[1]
             if exists[1] == 4:
-                return redirect("/index_admin")
-            return redirect("/index")
+                return redirect("/title_admin")
+            return redirect("/title")
     return render_template('loginform.html', title='Авторизация', form=form)
 
 
+i = True
+
+
 @app.route('/')
-@app.route('/index')
-def index():
-    if 'username' not in session:
+@app.route('/title')
+def title():
+    global i
+    if 'username' not in session or i:
         return render_template('title_out.html', text1=open('text_init.txt').read())
-    return render_template('title_in.html', text1=open('text_init.txt').read(), username=session['username'])
+    return render_template('title_in.html', text1=open('text_init.txt').read(),
+                           username=session['username'])
+
+
+@app.route('/out')
+def out():
+    global i
+    i = True
+    return render_template('title_out.html', text1=open('text_init.txt').read())
 
 
 @app.route('/lab')
@@ -65,9 +79,11 @@ def staff():
 
 @app.route('/upload_file', methods=['POST', 'GET'])
 def sample_file_upload():
+    global i
+    if 'username' not in session or i:
+        return redirect('/login')
     if request.method == 'GET':
-        return render_template('upload_file.html', filament='Сайт на доработке',
-                               text=open("Описание_заказа.txt").read() + "\n")
+        return render_template('upload_file.html', text=open("Описание_заказа.txt").read() + "\n")
     elif request.method == 'POST':
         if not os.path.exists(UPLOAD_FOLDER):
             os.makedirs(UPLOAD_FOLDER)
@@ -83,6 +99,8 @@ def sample_file_upload():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = LoginForm()
+    global i
+    i = False
     if request.method == 'GET':
         return render_template('loginform.html', title='Зарегистрироваться', form=form)
     elif request.method == 'POST':
@@ -94,7 +112,7 @@ def register():
         if (exists[0]):
             session['username'] = user_name
             session['user_id'] = exists[1]
-        return redirect("/index")
+        return redirect("/title")
 
 
 if __name__ == '__main__':
