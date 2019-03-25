@@ -8,6 +8,7 @@ class OrdersModel:
                             (id INTEGER PRIMARY KEY AUTOINCREMENT, 
                              order_name VARCHAR(50), 
                              order_status VARCHAR(50), 
+                             order_status_cod INTEGER,
                              order_name_delivery VARCHAR(50), 
                              order_delivery_cod INTEGER,
                              order_description VARCHAR(128),
@@ -17,12 +18,12 @@ class OrdersModel:
         cursor.close()
         self.connection.commit()
 
-    def insert(self, order_name, order_description, creation_data, user_id, status):
+    def insert(self, order_name, order_description, creation_data, user_id, status, cod):
         cursor = self.connection.cursor()
         cursor.execute('''INSERT INTO orders 
-                          (order_name, order_description, order_status, creation_data, user_id) 
-                          VALUES (?,?,?,?,?)''',
-                       (order_name, order_description, status, creation_data,
+                          (order_name, order_description, order_status, order_status_cod, creation_data, user_id) 
+                          VALUES (?,?,?,?,?,?)''',
+                       (order_name, order_description, status, cod, creation_data,
                         user_id))
         cursor.close()
         self.connection.commit()
@@ -30,6 +31,12 @@ class OrdersModel:
     def get(self, user_id):
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM orders WHERE user_id = ?", (str(user_id)))
+        row = cursor.fetchall()
+        return row
+
+    def get_status(self, status):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * FROM orders WHERE order_status_cod = ?", (str(status)))
         row = cursor.fetchall()
         return row
 

@@ -105,7 +105,7 @@ def sample_file_upload():
         n.close()
         order_model = OrdersModel(db.get_connection())
         order_model.insert(name, t, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                           session['user_id'], 'Заказ на обработке')
+                           session['user_id'], 'Заказ на обработке', 1)
         return "Ваш заказ ожидает обработки. <a href='/title'>Вернуться на главную</a>"
 
 
@@ -173,17 +173,33 @@ def title_admin():
 
 @app.route('/processed_orders')
 def processed_orders():
-    orders1 = OrdersModel(db.get_connection()).get_all()
+    orders1 = OrdersModel(db.get_connection()).get_status(1)
     orders = []
     for i in orders1:
         z = []
-        user = UsersModel(db.get_connection()).get(i[7])
+        user = UsersModel(db.get_connection()).get(i[8])
         z.append(user[1])
         z.append(user[0])
         z.append(i[1])
         z.append(i[6])
         orders.append(z)
     return render_template('processed_orders.html', username=session['username'], orders=orders)
+
+
+@app.route('/delivery_orders')
+def delivery_orders():
+    orders1 = OrdersModel(db.get_connection()).get_status(2)
+    orders = []
+    for i in orders1:
+        z = []
+        user = UsersModel(db.get_connection()).get(i[8])
+        z.append(user[1])
+        z.append(user[0])
+        z.append(i[1])
+        z.append(i[6])
+        orders.append(z)
+    return render_template('delivery_orders.html', username=session['username'],
+                           orders=orders)
 
 
 if __name__ == '__main__':
