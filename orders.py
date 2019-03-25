@@ -6,7 +6,10 @@ class OrdersModel:
         cursor = self.connection.cursor()
         cursor.execute('''CREATE TABLE IF NOT EXISTS orders 
                             (id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                             order_name VARCHAR(50),
+                             order_name VARCHAR(50), 
+                             order_status VARCHAR(50), 
+                             order_name_delivery VARCHAR(50), 
+                             order_delivery_cod INTEGER,
                              order_description VARCHAR(128),
                              creation_data VARCHAR(65536),
                              user_id INTEGER
@@ -14,18 +17,25 @@ class OrdersModel:
         cursor.close()
         self.connection.commit()
 
-    def insert(self, order_name, order_description, creation_data, user_id):
+    def insert(self, order_name, order_description, creation_data, user_id, status):
         cursor = self.connection.cursor()
         cursor.execute('''INSERT INTO orders 
-                          (order_name, order_description, creation_data, user_id) 
-                          VALUES (?,?,?,?)''', (order_name, order_description, creation_data,
-                                                user_id))
+                          (order_name, order_description, order_status, creation_data, user_id) 
+                          VALUES (?,?,?,?,?)''',
+                       (order_name, order_description, status, creation_data,
+                        user_id))
         cursor.close()
         self.connection.commit()
 
-    def get(self, order_id):
+    def get(self, user_id):
         cursor = self.connection.cursor()
-        cursor.execute("SELECT * FROM orders WHERE id = ?", (str(order_id)))
+        cursor.execute("SELECT * FROM orders WHERE user_id = ?", (str(user_id)))
+        row = cursor.fetchall()
+        return row
+
+    def get_order(self, id):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * FROM orders WHERE id = ?", (str(id)))
         row = cursor.fetchone()
         return row
 

@@ -6,6 +6,7 @@ from db import DB
 from login import LoginForm
 from user import UsersModel
 from orders import OrdersModel
+from chat import ChatModel
 import datetime
 
 db = DB()
@@ -14,6 +15,7 @@ app.secret_key = 'any random string'
 UPLOAD_FOLDER = "Загрузки"
 UsersModel(db.get_connection()).init_table()
 OrdersModel(db.get_connection()).init_table()
+ChatModel(db.get_connection()).init_table()
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -29,7 +31,7 @@ def login():
         if (exists[0]):
             session['username'] = user_name
             session['user_id'] = exists[1]
-            if exists[1] == 4:
+            if exists[1] == 3:
                 return redirect("/title_admin")
             return redirect("/title")
     return render_template('loginform.html', title='Авторизация', form=form)
@@ -100,9 +102,8 @@ def sample_file_upload():
         n.write(tmp)
         n.close()
         order_model = OrdersModel(db.get_connection())
-        print(name, t, session['user_id'])
         order_model.insert(name, t, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                           session['user_id'])
+                           session['user_id'], 'Заказ на обработке')
         return "Ваш заказ ожидает обработки. <a href='/title'>Вернуться на главную</a>"
 
 
@@ -132,10 +133,9 @@ def contact():
 
 @app.route("/myorders")
 def myorders():
-    print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
-    orders = OrdersModel(db.get_connection()).get_all()
+    orders = OrdersModel(db.get_connection()).get(session['user_id'])
     return render_template('myorders.html', username=session['username'],
-                           news=sorted(orders, key=(lambda x: x[2]), reverse=True))
+                           orders=sorted(orders, key=(lambda x: x[2]), reverse=True))
 
 
 @app.route('/delete_order/<int:news_id>', methods=['GET'])
@@ -145,6 +145,34 @@ def delete_order(news_id):
     nm = OrdersModel(db.get_connection())
     nm.delete(news_id)
     return redirect("/myorders")
+
+
+@app.route("/chat/<int:id_user2>", methods=['GET', 'POST'])
+def chat(id_user2):
+    if request.method == 'GET':
+        chat = ChatModel(db.get_connection()).get_all(session['user_id'], id_user2)
+        chat += ChatModel(db.get_connection()).get_all(id_user2, session['user_id'])
+        chat = sorted(chat, key=lambda x: x[0], reverse=True)
+        orders = OrdersModel(db.get_connection()).get(session['user_id'])
+        return render_template('chat.html', username=session['username'],
+                               message=chat, user_id=session['user_id'], orders=orders)
+    elif request.method == 'POST':
+        message = request.form['message']
+        order_name = request.form.get('order')
+        chat_model = ChatModel(db.get_connection())
+        chat_model.insert(session['user_id'], message, order_name, id_user2)
+        return redirect(f"/chat/{str(id_user2)}")
+
+
+@app.route('/title_admin')
+def title_admin():
+    return render_template('title_admin.html', username=session['username'])
+
+
+@app.route("/order/<int:item>")
+def order(item):
+    orders = OrdersModel(db.get_connection())
+    return render_template('order.html', item=orders.get_order(item))
 
 
 if __name__ == '__main__':
