@@ -27,6 +27,9 @@ if (r==true)
 <div class="alert alert-dark" role="alert">
     <h2><a href="/order/{{item[0]}}">{{item[1]}}</a></h2>
     <input type="button" onclick="show_confirm({{item[0]}})" value="Отменить заказ">
+    {%if item[4] == 'Доставка заказа'%}
+    <a href="/parsed/{{item[0]}}">Подтвердить получение заказа</a>
+    {%endif%}
 </div>
 {% endfor %}
 {% endblock %}

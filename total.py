@@ -34,7 +34,7 @@ def login():
         if (exists[0]):
             session['username'] = user_name
             session['user_id'] = exists[1]
-            if exists[1] == 3:
+            if exists[1] == 1:
                 return redirect("/title_admin")
             return redirect("/title")
     return render_template('loginform.html', title='Авторизация', form=form)
@@ -49,7 +49,7 @@ def title():
     global i
     if 'username' not in session or i:
         return render_template('title_out.html', text1=open('text_init.txt').read())
-    if session['user_id'] == 3:
+    if session['user_id'] == 1:
         return redirect("/title_admin")
     return render_template('title_in.html', text1=open('text_init.txt').read(),
                            username=session['username'])
@@ -158,7 +158,10 @@ def chat(id_user2):
         chat = ChatModel(db.get_connection()).get_all(session['user_id'], id_user2)
         chat += ChatModel(db.get_connection()).get_all(id_user2, session['user_id'])
         chat = sorted(chat, key=lambda x: x[0], reverse=True)
-        orders = OrdersModel(db.get_connection()).get(session['user_id'])
+        if session['user_id'] == 3:
+            orders = OrdersModel(db.get_connection()).get_all()
+        else:
+            orders = OrdersModel(db.get_connection()).get(session['user_id'])
         return render_template('chat.html', username=session['username'],
                                message=chat, user_id=session['user_id'], orders=orders)
     elif request.method == 'POST':
@@ -172,7 +175,8 @@ def chat(id_user2):
 @app.route("/order/<int:item>")
 def order(item):
     orders = OrdersModel(db.get_connection())
-    return render_template('order.html', item=orders.get_order(item))
+    delivery = DeliveryModel(db.get_connection()).get(item)
+    return render_template('order.html', item=orders.get_order(item), delivery=delivery)
 
 
 @app.route('/title_admin')
@@ -191,6 +195,7 @@ def processed_orders():
         z.append(user[0])
         z.append(i[1])
         z.append(i[6])
+        z.append(i[0])
         orders.append(z)
     return render_template('processed_orders.html', username=session['username'], orders=orders)
 
@@ -206,6 +211,7 @@ def delivery_orders():
         z.append(user[0])
         z.append(i[1])
         z.append(i[6])
+        z.append(i[0])
         orders.append(z)
     return render_template('delivery_orders.html', username=session['username'],
                            orders=orders)
@@ -214,18 +220,20 @@ def delivery_orders():
 @app.route("/sending/<int:order_id>", methods=['GET', 'POST'])
 def sending(order_id):
     if request.method == 'GET':
-        order = OrdersModel(db.get_connection()).get_order(order_id)
+        order = OrdersModel(db.get_connection()).get_order(1)
         return render_template('sending.html', username=session['username'], order=order)
     elif request.method == 'POST':
         global delivery
+        order1 = OrdersModel(db.get_connection())
         order = OrdersModel(db.get_connection()).get_order(order_id)
         type = request.form['type']
         cod_type = delivery[type]
         cod = request.form.get('cod')
         price = request.form['price']
         delivery_model = DeliveryModel(db.get_connection())
+        order1.update(2, order_id, 'Доставка заказа')
         delivery_model.insert(type, cod_type, cod, order[0], order[1], price, order[6])
-        return redirect("title_admin.html")
+        return redirect("/title_admin")
 
 
 if __name__ == '__main__':

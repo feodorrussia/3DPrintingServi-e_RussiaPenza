@@ -56,3 +56,10 @@ class OrdersModel:
         cursor.execute('''DELETE FROM orders WHERE id = ?''', (str(order_id)))
         cursor.close()
         self.connection.commit()
+
+    def update(self, cod, order_id, status):
+        cursor = self.connection.cursor()
+        cursor.execute('''UPDATE orders SET order_status_cod = ?, order_status = ? WHERE id = ?''',
+                       (str(cod), status, str(order_id)))
+        cursor.close()
+        self.connection.commit()

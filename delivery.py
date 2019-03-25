@@ -4,7 +4,7 @@ class DeliveryModel:
 
     def init_table(self):
         cursor = self.connection.cursor()
-        cursor.execute('''CREATE TABLE IF NOT EXISTS orders 
+        cursor.execute('''CREATE TABLE IF NOT EXISTS delivery 
                             (id INTEGER PRIMARY KEY AUTOINCREMENT, 
                              type_delivery VARCHAR(50),
                              cod_type_delivery INTEGER,
@@ -19,7 +19,7 @@ class DeliveryModel:
 
     def insert(self, type_delivery, cod_type_delivery, cod_delivery, id_order, name_order, price_order, user_id):
         cursor = self.connection.cursor()
-        cursor.execute('''INSERT INTO orders 
+        cursor.execute('''INSERT INTO delivery 
                           (type_delivery, cod_type_delivery, cod_delivery, id_order, name_order, price_order, user_id) 
                           VALUES (?,?,?,?,?,?,?)''',
                        (type_delivery, cod_type_delivery, cod_delivery, id_order, name_order,
@@ -29,30 +29,6 @@ class DeliveryModel:
 
     def get(self, user_id):
         cursor = self.connection.cursor()
-        cursor.execute("SELECT * FROM orders WHERE user_id = ?", (str(user_id)))
-        row = cursor.fetchall()
-        return row
-
-    def get_order(self, id):
-        cursor = self.connection.cursor()
-        cursor.execute("SELECT * FROM orders WHERE id = ?", (str(id)))
+        cursor.execute("SELECT * FROM delivery WHERE id_order = ?", (str(user_id)))
         row = cursor.fetchone()
         return row
-
-    def get_status(self, status):
-        cursor = self.connection.cursor()
-        cursor.execute("SELECT * FROM orders WHERE order_status_cod = ?", (str(status)))
-        row = cursor.fetchall()
-        return row
-
-    def get_all(self):
-        cursor = self.connection.cursor()
-        cursor.execute("SELECT * FROM orders")
-        rows = cursor.fetchall()
-        return rows
-
-    def delete(self, order_id):
-        cursor = self.connection.cursor()
-        cursor.execute('''DELETE FROM orders WHERE id = ?''', (str(order_id)))
-        cursor.close()
-        self.connection.commit()
