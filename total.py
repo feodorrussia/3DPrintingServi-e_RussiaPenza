@@ -202,5 +202,11 @@ def delivery_orders():
                            orders=orders)
 
 
+@app.route("/sending/<int:order_id>")
+def sending(order_id):
+    orders = OrdersModel(db.get_connection()).get(session['user_id'])
+    return render_template('myorders.html', username=session['username'],
+                           news=sorted(orders, key=(lambda x: x[2]), reverse=True))
+
 if __name__ == '__main__':
     app.run(port=8080, host='127.0.0.1')
