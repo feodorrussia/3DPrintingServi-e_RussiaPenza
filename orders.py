@@ -17,12 +17,13 @@ class OrdersModel:
         cursor.close()
         self.connection.commit()
 
-    def insert(self, order_name, order_description, creation_data, user_id):
+    def insert(self, order_name, order_description, creation_data, user_id, status):
         cursor = self.connection.cursor()
         cursor.execute('''INSERT INTO orders 
-                          (order_name, order_description, creation_data, user_id) 
-                          VALUES (?,?,?,?)''', (order_name, order_description, creation_data,
-                                                user_id))
+                          (order_name, order_description, order_status, creation_data, user_id) 
+                          VALUES (?,?,?,?,?)''',
+                       (order_name, order_description, status, creation_data,
+                        user_id))
         cursor.close()
         self.connection.commit()
 

@@ -103,7 +103,7 @@ def sample_file_upload():
         n.close()
         order_model = OrdersModel(db.get_connection())
         order_model.insert(name, t, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                           session['user_id'])
+                           session['user_id'], 'Заказ на обработке')
         return "Ваш заказ ожидает обработки. <a href='/title'>Вернуться на главную</a>"
 
 

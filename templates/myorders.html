@@ -27,8 +27,8 @@ if (r==true)
 <div class="alert alert-dark" role="alert">
     <div>ID Заказа: {{ item[0] }}</div>
     <h2>{{item[1]}}</h2>
-    <div>{{item[2]}}</div>
-    <div>Дата создания заказа: {{item[3]}}</div>
+    <div>{{item[5]}}</div>
+    <div>Дата создания заказа: {{item[6]}}</div>
     <input type="button" onclick="show_confirm({{item[0]}})" value="Отменить заказ">
 </div>
 {% endfor %}
