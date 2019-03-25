@@ -6,7 +6,10 @@ class OrdersModel:
         cursor = self.connection.cursor()
         cursor.execute('''CREATE TABLE IF NOT EXISTS orders 
                             (id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                             order_name VARCHAR(50),
+                             order_name VARCHAR(50), 
+                             order_status VARCHAR(50), 
+                             order_name_delivery VARCHAR(50), 
+                             order_delivery_cod VARCHAR(50),
                              order_description VARCHAR(128),
                              creation_data VARCHAR(65536),
                              user_id INTEGER

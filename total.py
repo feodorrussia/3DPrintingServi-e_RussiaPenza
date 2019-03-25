@@ -31,7 +31,7 @@ def login():
         if (exists[0]):
             session['username'] = user_name
             session['user_id'] = exists[1]
-            if exists[1] == 4:
+            if exists[1] == 3:
                 return redirect("/title_admin")
             return redirect("/title")
     return render_template('loginform.html', title='Авторизация', form=form)
@@ -133,7 +133,7 @@ def contact():
 
 @app.route("/myorders")
 def myorders():
-    orders = OrdersModel(db.get_connection()).get_all()
+    orders = OrdersModel(db.get_connection()).get(session['user_id'])
     return render_template('myorders.html', username=session['username'],
                            news=sorted(orders, key=(lambda x: x[2]), reverse=True))
 
@@ -162,6 +162,11 @@ def chat(id_user2):
         chat_model = ChatModel(db.get_connection())
         chat_model.insert(session['user_id'], message, order_name, id_user2)
         return redirect(f"/chat/{str(id_user2)}")
+
+
+@app.route('/title_admin')
+def title_admin():
+    return render_template('title_admin.html', username=session['username'])
 
 
 if __name__ == '__main__':
