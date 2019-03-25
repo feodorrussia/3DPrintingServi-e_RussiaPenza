@@ -25,10 +25,7 @@ if (r==true)
 <a href="/title">Главная</a>
 {% for item in news %}
 <div class="alert alert-dark" role="alert">
-    <div>ID Заказа: {{ item[0] }}</div>
-    <h2>{{item[1]}}</h2>
-    <div>{{item[5]}}</div>
-    <div>Дата создания заказа: {{item[6]}}</div>
+    <h2><a href="/order/{{item[0]}}">{{item[1]}}</a></h2>
     <input type="button" onclick="show_confirm({{item[0]}})" value="Отменить заказ">
 </div>
 {% endfor %}

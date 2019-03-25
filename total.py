@@ -7,6 +7,7 @@ from login import LoginForm
 from user import UsersModel
 from orders import OrdersModel
 from chat import ChatModel
+from delivery import DeliveryModel
 import datetime
 
 db = DB()
@@ -16,6 +17,8 @@ UPLOAD_FOLDER = "Загрузки"
 UsersModel(db.get_connection()).init_table()
 OrdersModel(db.get_connection()).init_table()
 ChatModel(db.get_connection()).init_table()
+DeliveryModel(db.get_connection()).init_table()
+delivery = {'Курьером(по г.Пенза)': 1, 'Почта России': 2, 'DPD': 3}
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -104,7 +107,7 @@ def sample_file_upload():
         n.write(tmp)
         n.close()
         order_model = OrdersModel(db.get_connection())
-        order_model.insert(name, t, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        order_model.insert(name, t, FILE_NAME, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
                            session['user_id'], 'Заказ на обработке', 1)
         return "Ваш заказ ожидает обработки. <a href='/title'>Вернуться на главную</a>"
 
@@ -166,6 +169,12 @@ def chat(id_user2):
         return redirect(f"/chat/{str(id_user2)}")
 
 
+@app.route("/order/<int:item>")
+def order(item):
+    orders = OrdersModel(db.get_connection())
+    return render_template('order.html', item=orders.get_order(item))
+
+
 @app.route('/title_admin')
 def title_admin():
     return render_template('title_admin.html', username=session['username'])
@@ -177,7 +186,7 @@ def processed_orders():
     orders = []
     for i in orders1:
         z = []
-        user = UsersModel(db.get_connection()).get(i[8])
+        user = UsersModel(db.get_connection()).get(i[7])
         z.append(user[1])
         z.append(user[0])
         z.append(i[1])
@@ -192,7 +201,7 @@ def delivery_orders():
     orders = []
     for i in orders1:
         z = []
-        user = UsersModel(db.get_connection()).get(i[8])
+        user = UsersModel(db.get_connection()).get(i[7])
         z.append(user[1])
         z.append(user[0])
         z.append(i[1])
@@ -202,11 +211,22 @@ def delivery_orders():
                            orders=orders)
 
 
-@app.route("/sending/<int:order_id>")
+@app.route("/sending/<int:order_id>", methods=['GET', 'POST'])
 def sending(order_id):
-    orders = OrdersModel(db.get_connection()).get(session['user_id'])
-    return render_template('myorders.html', username=session['username'],
-                           news=sorted(orders, key=(lambda x: x[2]), reverse=True))
+    if request.method == 'GET':
+        order = OrdersModel(db.get_connection()).get_order(order_id)
+        return render_template('sending.html', username=session['username'], order=order)
+    elif request.method == 'POST':
+        global delivery
+        order = OrdersModel(db.get_connection()).get_order(order_id)
+        type = request.form['type']
+        cod_type = delivery[type]
+        cod = request.form.get('cod')
+        price = request.form['price']
+        delivery_model = DeliveryModel(db.get_connection())
+        delivery_model.insert(type, cod_type, cod, order[0], order[1], price, order[6])
+        return redirect("title_admin.html")
+
 
 if __name__ == '__main__':
     app.run(port=8080, host='127.0.0.1')

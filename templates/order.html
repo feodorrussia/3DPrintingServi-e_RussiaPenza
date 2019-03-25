@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+<body>
+    <div>Название заказа: {{ item[1] }}</div>
+    <div>Номер заказ: {{ item[0] }}</div>
+    <div>Дата создания заказа: {{ item[6] }}</div>
+    <div>Статус заказа: {{ item[2] }}</div>
+    <div>Вид доставки: {{ item[3] }}</div>
+    <div>Код доставки: {{ item[4] }}</div>
+    <div>Описание заказа: {{ item[5] }}</div>
+</body>
+
+{% endblock %}

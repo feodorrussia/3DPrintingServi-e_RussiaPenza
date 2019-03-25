@@ -1,4 +1,4 @@
-class OrdersModel:
+class DeliveryModel:
     def __init__(self, connection):
         self.connection = connection
 
@@ -6,24 +6,24 @@ class OrdersModel:
         cursor = self.connection.cursor()
         cursor.execute('''CREATE TABLE IF NOT EXISTS orders 
                             (id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                             order_name VARCHAR(50), 
-                             order_description VARCHAR(128),
-                             file_name VARCHAR(128),
-                             order_status VARCHAR(50), 
-                             order_status_cod INTEGER,
-                             creation_data VARCHAR(65536),
+                             type_delivery VARCHAR(50),
+                             cod_type_delivery INTEGER,
+                             cod_delivery INTEGER,
+                             id_order INTEGER,
+                             name_order VARCHAR(50),
+                             price_order INTEGER,
                              user_id INTEGER
                              )''')
         cursor.close()
         self.connection.commit()
 
-    def insert(self, order_name, order_description, file_name, creation_data, user_id, status, cod):
+    def insert(self, type_delivery, cod_type_delivery, cod_delivery, id_order, name_order, price_order, user_id):
         cursor = self.connection.cursor()
         cursor.execute('''INSERT INTO orders 
-                          (order_name, order_description, file_name, order_status, order_status_cod, creation_data, user_id) 
+                          (type_delivery, cod_type_delivery, cod_delivery, id_order, name_order, price_order, user_id) 
                           VALUES (?,?,?,?,?,?,?)''',
-                       (order_name, order_description, file_name, status, cod, creation_data,
-                        user_id))
+                       (type_delivery, cod_type_delivery, cod_delivery, id_order, name_order,
+                        price_order, user_id))
         cursor.close()
         self.connection.commit()
 
