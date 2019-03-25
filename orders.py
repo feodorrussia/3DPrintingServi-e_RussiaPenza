@@ -57,9 +57,9 @@ class OrdersModel:
         cursor.close()
         self.connection.commit()
 
-    def update(self, cod, order_id, status):
+    def update(self, cod, status, order_id):
         cursor = self.connection.cursor()
-        cursor.execute('''UPDATE orders SET order_status_cod = ?, order_status = ? WHERE id = ?''',
-                       (str(cod), status, str(order_id)))
+        cursor.execute('''UPDATE orders SET order_status = ?, order_status_cod = ? WHERE id = ?''',
+                       (status, str(cod), str(order_id)))
         cursor.close()
         self.connection.commit()

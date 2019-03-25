@@ -2,8 +2,11 @@
 
 {% block content %}
 
-
+{%if session['user_id'] != 1%}
 <a class="navbar-brand" href="/myorders">Назад</a>
+{%else%}
+<a class="navbar-brand" href="/title_admin">Назад</a>
+{%endif%}
 <body>
     <div>Название заказа: {{ item[1] }}</div>
     <div>Номер заказ: {{ item[0] }}</div>

@@ -232,9 +232,23 @@ def sending(order_id):
         cod = request.form.get('cod')
         price = request.form['price']
         delivery_model = DeliveryModel(db.get_connection())
-        order1.update(2, order_id, 'Доставка заказа')
+        order1.update(2, 'Доставка заказа', order_id)
         delivery_model.insert(type, cod_type, cod, order[0], order[1], price, order[6])
         return redirect("/title_admin")
+
+
+@app.route("/parsed/<int:order_id>")
+def parsed(order_id):
+    orders = OrdersModel(db.get_connection())
+    orders.update(3, 'Заказ доставлен', order_id)
+    return redirect("/myorders")
+
+
+@app.route("/parsed_orders")
+def parsed_orders():
+    orders = OrdersModel(db.get_connection())
+    row = orders.get_status(3)
+    return render_template("parsed_orders.html", row=row)
 
 
 if __name__ == '__main__':

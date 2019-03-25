@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<a href="/title">Главная</a>
+{% for item in row %}
+<div class="alert alert-dark" role="alert">
+    <h2><a href="/order/{{item[0]}}">{{item[1]}}</a></h2>
+</div>
+{% endfor %}
+
+
+{% endblock %}
