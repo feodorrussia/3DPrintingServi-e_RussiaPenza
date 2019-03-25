@@ -9,6 +9,7 @@ from orders import OrdersModel
 from chat import ChatModel
 from delivery import DeliveryModel
 import datetime
+from json import load
 
 db = DB()
 app = Flask(__name__)
@@ -79,7 +80,7 @@ def PC():
 
 @app.route('/filament')
 def filament():
-    return render_template('filament.html', filament='Сайт на доработке')
+    return render_template('filament.html', filament=load(open('filament.json')))
 
 
 @app.route('/staff')

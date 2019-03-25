@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-<header>
-    <h2>{{filament}}</h2>
-</header>
 <a href="/title">Главная</a>
+<header>
+    {%for i in filament%}
+    <div class="alert alert-dark" role="alert">
+        <h2>Color: {{i[0]}}</h2>
+        <h3>Diameter: {{i[1]}}</h3>
+        <h3>Composition: {{i[2]}}</h3>
+    </div>
+    {%endfor%}
+</header>
 {% endblock %}
