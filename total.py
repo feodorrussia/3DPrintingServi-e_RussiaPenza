@@ -46,6 +46,8 @@ def title():
     global i
     if 'username' not in session or i:
         return render_template('title_out.html', text1=open('text_init.txt').read())
+    if session['user_id'] == 3:
+        return redirect("/title_admin")
     return render_template('title_in.html', text1=open('text_init.txt').read(),
                            username=session['username'])
 
@@ -167,6 +169,21 @@ def chat(id_user2):
 @app.route('/title_admin')
 def title_admin():
     return render_template('title_admin.html', username=session['username'])
+
+
+@app.route('/processed_orders')
+def processed_orders():
+    orders1 = OrdersModel(db.get_connection()).get_all()
+    orders = []
+    for i in orders1:
+        z = []
+        user = UsersModel(db.get_connection()).get(i[7])
+        z.append(user[1])
+        z.append(user[0])
+        z.append(i[1])
+        z.append(i[6])
+        orders.append(z)
+    return render_template('processed_orders.html', username=session['username'], orders=orders)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<a href="/title">Главная</a>
+{% for item in orders %}
+<div class="alert alert-dark" role="alert">
+    <a class="navbar-brand" href="/chat/{{item[1]}}">{{item[0]}}</a>
+    <h>{{item[2]}}</h>
+    <h5>{{item[3]}}</h5>
+</div>
+{% endfor %}
+{% endblock %}
