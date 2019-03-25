@@ -3,15 +3,19 @@
 {% block content %}
 
 
-
+<a class="navbar-brand" href="/myorders">Назад</a>
 <body>
     <div>Название заказа: {{ item[1] }}</div>
     <div>Номер заказ: {{ item[0] }}</div>
     <div>Дата создания заказа: {{ item[6] }}</div>
-    <div>Статус заказа: {{ item[2] }}</div>
-    <div>Вид доставки: {{ item[3] }}</div>
-    <div>Код доставки: {{ item[4] }}</div>
-    <div>Описание заказа: {{ item[5] }}</div>
+    <div>Статус заказа: {{ item[4] }}</div>
+    {%if item[4] == 'Доставка заказа'%}
+    <div>Вид доставки: {{ delivery[1] }}</div>
+    {%if delivery[3] %}
+    <div>Код доставки: {{ delivery[3] }}</div>
+    {%endif%}
+    {%endif%}
+    <div>Описание заказа: {{ item[2] }}</div>
 </body>
 
 {% endblock %}

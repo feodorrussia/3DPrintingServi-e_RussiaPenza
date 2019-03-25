@@ -3,17 +3,14 @@
 {% block content %}
 <head>
     <script type="text/javascript">
-function show_confirm(item)
-{
-var r=confirm("Вы точно хотите отменить заказ?");
-if (r==true)
-  {
-  window.location.replace("/delete_order/" + item);
-  alert("Мы благодарим Вас за сотрудничество");
-  }
-}
 
-
+        function cancel_order(item){
+            var fl = confirm("Вы точно хотите отменить заказ?");
+            if (fl == true){
+              window.location.replace("/delete_order/" + item);
+              alert("Мы благодарим Вас за сотрудничество");
+              }
+        }
     </script>
 </head>
 
@@ -23,10 +20,13 @@ if (r==true)
 {% endif %}
 <a href="/upload_file">Добавить заказ</a>
 <a href="/title">Главная</a>
-{% for item in orders %}
+{% for item in news %}
 <div class="alert alert-dark" role="alert">
     <h2><a href="/order/{{item[0]}}">{{item[1]}}</a></h2>
-    <input type="button" onclick="show_confirm({{item[0]}})" value="Отменить заказ">
+    <input type="button" onclick="cancel_order({{item[0]}})" value="Отменить заказ">
+    {%if item[4] == 'Доставка заказа'%}
+    <a href="/parsed/1">Подтвердить получение заказа</a>
+    {%endif%}
 </div>
 {% endfor %}
 {% endblock %}

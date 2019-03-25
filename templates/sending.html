@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Отправка заказа ID: {{order[0]}}</h1>
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="type">Тип доставки</label>
+        <select class="form-control" id="type" name="type">
+            <option>Курьером(по г.Пенза)</option>
+            <option>Почта России</option>
+            <option>DPD</option>
+        </select>
+    </div>
+    <input class="form-control" id="cod" placeholder="Код доставки" name="cod">
+    <input class="form-control" id="prise" placeholder="Цена заказа" name="price">
+    <button type="submit" class="btn btn-primary">Отправить</button><a class="navbar-brand" href="/title">Главная</a>
+</form>
+{% endblock %}
