@@ -9,7 +9,7 @@ class OrdersModel:
                              order_name VARCHAR(50), 
                              order_status VARCHAR(50), 
                              order_name_delivery VARCHAR(50), 
-                             order_delivery_cod VARCHAR(50),
+                             order_delivery_cod INTEGER,
                              order_description VARCHAR(128),
                              creation_data VARCHAR(65536),
                              user_id INTEGER
