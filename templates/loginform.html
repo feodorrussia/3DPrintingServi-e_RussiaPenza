@@ -23,7 +23,7 @@
             {% endfor %}
         </p>
         <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-        <p>{{ form.submit() }}</p>
+        <p>{{ form.submit() }}</p><a class="navbar-brand" href="/title">Главная</a>
         {%if title != 'Зарегистрироваться'%}
              <a class="navbar-brand" href="/register">Зарегистрироваться</a>
         {%endif%}

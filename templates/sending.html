@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Отправка заказа ID: {{order[0]}}</h1>
+<h1>Отправка заказа ID: {{order[0]}}({{order[1]}})</h1>
 <form method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label for="type">Тип доставки</label>

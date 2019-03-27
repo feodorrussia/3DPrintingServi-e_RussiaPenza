@@ -25,8 +25,6 @@ delivery = {'Курьером(по г.Пенза)': 1, 'Почта России'
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    global i
-    i = False
     if form.validate_on_submit():
         user_name = form.username.data
         password = form.password.data
@@ -35,6 +33,8 @@ def login():
         if (exists[0]):
             session['username'] = user_name
             session['user_id'] = exists[1]
+            global i
+            i = False
             if exists[1] == 1:
                 return redirect("/title_admin")
             return redirect("/title")
@@ -198,7 +198,7 @@ def processed_orders():
         z.append(i[6])
         z.append(i[0])
         orders.append(z)
-    return render_template('processed_orders.html', username=session['username'], orders=orders)
+    return render_template('processed_orders.html', username=session['username'], orders=sorted(orders, key=(lambda x: x[4]), reverse=True))
 
 
 @app.route('/delivery_orders')
@@ -215,13 +215,13 @@ def delivery_orders():
         z.append(i[0])
         orders.append(z)
     return render_template('delivery_orders.html', username=session['username'],
-                           orders=orders)
+                           orders=sorted(orders, key=(lambda x: x[4]), reverse=True))
 
 
 @app.route("/sending/<int:order_id>", methods=['GET', 'POST'])
 def sending(order_id):
     if request.method == 'GET':
-        order = OrdersModel(db.get_connection()).get_order(1)
+        order = OrdersModel(db.get_connection()).get_order(order_id)
         return render_template('sending.html', username=session['username'], order=order)
     elif request.method == 'POST':
         global delivery
