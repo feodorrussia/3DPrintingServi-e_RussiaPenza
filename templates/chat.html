@@ -12,8 +12,9 @@
     <div class="form-group">
         <label for="order">Выберите заказ</label>
         <select class="form-control" id="order" name="order">
+            <option>-</option>
         {% for order in orders %}
-        <option>Заказ: {{order[1]}}</option>
+            <option>Заказ: {{order[1]}}</option>
         {% endfor %}
     </select>
     </div>
