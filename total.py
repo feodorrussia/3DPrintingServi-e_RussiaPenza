@@ -110,7 +110,7 @@ def sample_file_upload():
         order_model = OrdersModel(db.get_connection())
         order_model.insert(name, t, FILE_NAME, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
                            session['user_id'], 'Заказ на обработке', 1)
-        return "Ваш заказ ожидает обработки. <a href='/title'>Вернуться на главную</a>"
+        return redirect("/title")
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -141,7 +141,7 @@ def contact():
 def myorders():
     orders = OrdersModel(db.get_connection()).get(session['user_id'])
     return render_template('myorders.html', username=session['username'],
-                           news=sorted(orders, key=(lambda x: x[2]), reverse=True))
+                           news=sorted(orders, key=(lambda x: x[0]), reverse=True))
 
 
 @app.route('/delete_order/<int:news_id>', methods=['GET'])
@@ -159,7 +159,7 @@ def chat(id_user2):
         chat = ChatModel(db.get_connection()).get_all(session['user_id'], id_user2)
         chat += ChatModel(db.get_connection()).get_all(id_user2, session['user_id'])
         chat = sorted(chat, key=lambda x: x[0], reverse=True)
-        if session['user_id'] == 3:
+        if session['user_id'] == 1:
             orders = OrdersModel(db.get_connection()).get_all()
         else:
             orders = OrdersModel(db.get_connection()).get(session['user_id'])
